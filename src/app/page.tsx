@@ -1,6 +1,7 @@
 "use client";
 import { BACKGROUND_OPTIONS } from "@/components/background";
 import Playground from "@/components/playground";
+import ColorModifier from "@/components/color-modifier";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,10 +15,24 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [currentBackgroundName, setCurrentBackgroundName] = useState<string>("");
+  const [originalBackground, setOriginalBackground] = useState<React.ReactNode>(null);
 
   const resetBg = () => {
     setPreview(null);
     setTheme("light");
+    setCurrentBackgroundName("");
+    setOriginalBackground(null);
+  };
+
+  const handlePreviewChange = (newPreview: React.ReactNode, backgroundName: string, originalBg: React.ReactNode) => {
+    setPreview(newPreview);
+    setCurrentBackgroundName(backgroundName);
+    setOriginalBackground(originalBg);
+  };
+
+  const handleBackgroundModification = (modifiedBackground: React.ReactNode) => {
+    setPreview(modifiedBackground);
   };
 
   // Filter backgrounds based on search query
@@ -175,7 +190,7 @@ export default function Home() {
                  return (
                    <Playground
                      key={`${background.name}-${startIndex + index}`}
-                     setPreview={setPreview}
+                     setPreview={(preview) => handlePreviewChange(preview, background.name, background.component)}
                      theme={background.theme}
                      setTheme={setTheme}
                      name={background.name}
@@ -200,7 +215,7 @@ export default function Home() {
               </p>
             </div>
           )}
-
+          
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-8 flex justify-center">
@@ -272,6 +287,15 @@ export default function Home() {
               it. And don't forget to tweak it to your needs.`}
           </div>
         </div>
+        
+        {/* Color Modifier Component */}
+        {preview && originalBackground && (
+          <ColorModifier
+            currentBackground={originalBackground}
+            onBackgroundChange={handleBackgroundModification}
+            backgroundName={currentBackgroundName}
+          />
+        )}
         <footer>
           <div className="flex items-center justify-center py-8">
             <span className="text-sm text-neutral-800 dark:text-neutral-200">
