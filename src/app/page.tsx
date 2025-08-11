@@ -24,7 +24,7 @@ export default function Home() {
           <div />
           <nav className="flex gap-6">
             <a
-              href="https://twitter.com/Ibelick"
+              href="https://twitter.com/Ankur02Sarkar"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex"
@@ -35,7 +35,7 @@ export default function Home() {
               />
             </a>
             <a
-              href="https://github.com/ibelick/background-snippets"
+              href="https://github.com/Ankur02Sarkar/tw-bg-snippets"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex"
@@ -51,7 +51,7 @@ export default function Home() {
           <div className="relative mx-auto flex max-w-2xl flex-col items-center">
             <div className="mb-8 flex">
               <a
-                href="https://github.com/ibelick/background-snippets"
+                href="https://github.com/Ankur02Sarkar/tw-bg-snippets"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex"
@@ -85,7 +85,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex gap-4">
               <a
-                href="https://github.com/ibelick/background-snippets"
+                href="https://github.com/Ankur02Sarkar/tw-bg-snippets"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center"
@@ -126,12 +126,12 @@ export default function Home() {
             <span className="text-sm text-neutral-800 dark:text-neutral-200">
               Made by
               <a
-                href="https://twitter.com/Ibelick"
+                href="https://twitter.com/Ankur02Sarkar"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-1 text-neutral-950 dark:text-neutral-100"
               >
-                @Ibelick
+                @Ankur02Sarkar
               </a>
             </span>
           </div>
