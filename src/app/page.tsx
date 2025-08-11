@@ -64,7 +64,7 @@ export default function Home() {
       <div className="fixed left-0 top-0 -z-10 h-full w-full">
         {preview ? preview : null}
       </div>
-      <div className="relative mx-auto h-screen w-full max-w-7xl px-6 md:px-8 lg:px-12">
+      <div className="relative mx-auto h-screen w-full max-w-[95vw] px-6 md:px-8 lg:px-12">
         <header className="flex items-center justify-between py-8">
           <div />
           <nav className="flex gap-6">
@@ -185,7 +185,7 @@ export default function Home() {
 
           {/* Background Grid */}
           {currentBackgrounds.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
               {currentBackgrounds.map((background, index) => {
                  return (
                    <Playground
