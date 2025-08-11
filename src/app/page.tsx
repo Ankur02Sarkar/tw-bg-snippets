@@ -2,16 +2,46 @@
 import { BACKGROUND_OPTIONS } from "@/components/background";
 import Playground from "@/components/playground";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Github, Twitter } from "lucide-react";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { ArrowRight, Github, Twitter, Search } from "lucide-react";
+import { useState, useMemo } from "react";
 
 export default function Home() {
   const [preview, setPreview] = useState<null | React.ReactNode>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const resetBg = () => {
     setPreview(null);
     setTheme("light");
+  };
+
+  // Filter backgrounds based on search query
+  const filteredBackgrounds = useMemo(() => {
+    return BACKGROUND_OPTIONS.filter(background =>
+      background.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredBackgrounds.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentBackgrounds = filteredBackgrounds.slice(startIndex, endIndex);
+
+  // Reset to page 1 when search query or items per page changes
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(parseInt(value));
+    setCurrentPage(1);
   };
 
   return (
@@ -101,20 +131,141 @@ export default function Home() {
           </div>
         </div>
         <div className="overflow-hidden px-4 pb-20 pt-52 md:px-10">
-          <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2 lg:grid-cols-4">
-            {BACKGROUND_OPTIONS.map((background, index) => {
-              return (
-                <Playground
-                  key={index}
-                  setPreview={setPreview}
-                  theme={background.theme}
-                  setTheme={setTheme}
-                >
-                  {background.component}
-                </Playground>
-              );
-            })}
+          {/* Search and Filter Controls */}
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search backgrounds..."
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="pl-10 bg-white dark:bg-black border-neutral-200 dark:border-neutral-800"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Show:</span>
+              <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+                <SelectTrigger className="w-20 bg-white dark:bg-black border-neutral-200 dark:border-neutral-800">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="15">15</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-gray-600 dark:text-gray-400">per page</span>
+            </div>
           </div>
+
+          {/* Results Info */}
+          <div className="mb-6">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Showing {currentBackgrounds.length} of {filteredBackgrounds.length} backgrounds
+              {searchQuery && ` for "${searchQuery}"`}
+            </p>
+          </div>
+
+          {/* Background Grid */}
+          {currentBackgrounds.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 pb-6 md:grid-cols-2 lg:grid-cols-4">
+              {currentBackgrounds.map((background, index) => {
+                 return (
+                   <Playground
+                     key={`${background.name}-${startIndex + index}`}
+                     setPreview={setPreview}
+                     theme={background.theme}
+                     setTheme={setTheme}
+                     name={background.name}
+                   >
+                     {background.component}
+                   </Playground>
+                 );
+               })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="text-gray-400 dark:text-gray-600 mb-4">
+                <Search className="h-12 w-12" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                No backgrounds found
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
+                {searchQuery
+                  ? `No backgrounds match "${searchQuery}". Try a different search term.`
+                  : "No backgrounds available."}
+              </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex justify-center">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage > 1) setCurrentPage(currentPage - 1);
+                      }}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Show first page, last page, current page, and pages around current page
+                    const showPage = 
+                      page === 1 || 
+                      page === totalPages || 
+                      (page >= currentPage - 1 && page <= currentPage + 1);
+                    
+                    if (!showPage) {
+                      // Show ellipsis for gaps
+                      if (page === currentPage - 2 || page === currentPage + 2) {
+                        return (
+                          <PaginationItem key={`ellipsis-${page}`}>
+                            <span className="px-3 py-2 text-gray-400">...</span>
+                          </PaginationItem>
+                        );
+                      }
+                      return null;
+                    }
+                    
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setCurrentPage(page);
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  })}
+                  
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                      }}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
           <div className="inline-flex max-w-2xl rounded-md border border-neutral-200 bg-white p-2 text-sm text-neutral-900 dark:border-neutral-900 dark:bg-black dark:text-neutral-200">
             {`These backgrounds are made for a full page background. The preview
               can be different from the actual result. Click on preview to test
