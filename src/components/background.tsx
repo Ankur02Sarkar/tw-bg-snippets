@@ -815,6 +815,32 @@ const BgLiquidGradient = () => {
   );
 };
 
+const BgLiquidGradientGreen = () => {
+  return (
+    <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-b from-sky-200 via-emerald-50 to-green-100">
+      {/* Base gradient mesh layers */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sky-200/40 via-white/30 to-green-300/40" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-emerald-200/30 via-white/20 to-sky-300/30" />
+      <div className="absolute inset-0 bg-gradient-to-bl from-white/25 via-emerald-100/30 to-green-200/35" />
+      
+      {/* Large blurred cloud-like elements */}
+      <div className="absolute top-[20%] left-[10%] h-96 w-96 rounded-full bg-gradient-to-br from-sky-300/30 to-white/40 blur-3xl animate-pulse" />
+      <div className="absolute bottom-[10%] right-[15%] h-80 w-80 rounded-full bg-gradient-to-br from-white/35 to-green-400/30 blur-3xl animate-pulse [animation-delay:2s]" />
+      <div className="absolute top-[50%] left-[50%] h-72 w-72 rounded-full bg-gradient-to-br from-emerald-300/25 to-white/30 blur-2xl animate-pulse [animation-delay:4s]" />
+      
+      {/* Additional white cloud elements */}
+      <div className="absolute top-[35%] right-[25%] h-64 w-64 rounded-full bg-gradient-to-br from-white/40 to-sky-200/25 blur-2xl animate-pulse [animation-delay:1s]" />
+      <div className="absolute bottom-[35%] left-[30%] h-56 w-56 rounded-full bg-gradient-to-br from-emerald-200/30 to-white/35 blur-xl animate-pulse [animation-delay:3s]" />
+      <div className="absolute top-[70%] right-[40%] h-48 w-48 rounded-full bg-gradient-to-br from-white/30 to-green-300/25 blur-xl animate-pulse [animation-delay:5s]" />
+      
+      {/* Smaller floating cloud wisps */}
+      <div className="absolute top-[15%] left-[60%] h-32 w-32 rounded-full bg-white/25 blur-lg animate-pulse [animation-delay:1.5s]" />
+      <div className="absolute bottom-[20%] right-[60%] h-40 w-40 rounded-full bg-gradient-to-br from-sky-100/30 to-white/20 blur-lg animate-pulse [animation-delay:2.5s]" />
+      <div className="absolute top-[80%] left-[20%] h-36 w-36 rounded-full bg-gradient-to-br from-white/20 to-emerald-100/25 blur-md animate-pulse [animation-delay:4.5s]" />
+    </div>
+  );
+};
+
 const BgDarkNeon = () => {
   return (
     <div className="absolute inset-0 -z-10 h-full w-full bg-gray-900">
@@ -1492,6 +1518,11 @@ export const BACKGROUND_OPTIONS = [
   {
     name: "Liquid Gradient",
     component: <BgLiquidGradient />,
+    theme: "light",
+  },
+  {
+    name: "Liquid Gradient Green",
+    component: <BgLiquidGradientGreen />,
     theme: "light",
   },
   {
