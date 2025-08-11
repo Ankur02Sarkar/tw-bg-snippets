@@ -1,9 +1,9 @@
 "use client";
-import { ArrowRight, Github, Twitter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { BACKGROUND_OPTIONS } from "@/components/background";
 import Playground from "@/components/playground";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Github, Twitter } from "lucide-react";
+import { useState } from "react";
 
 export default function Home() {
   const [preview, setPreview] = useState<null | React.ReactNode>(null);
